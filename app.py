@@ -1,6 +1,6 @@
 import streamlit as st
 import pickle
-import numpy as np
+import pandas as pd
 
 # Load model
 with open('heart_model.pkl', 'rb') as file:
@@ -12,90 +12,51 @@ st.title("❤️ Heart Disease Prediction App")
 st.write("Enter patient details below")
 
 # User Inputs
-age = st.number_input("Age", 20, 100, 45)
-
-sex = st.selectbox(
-    "Sex",
-    [0, 1]
-)
-
-cp = st.selectbox(
-    "Chest Pain Type",
-    [0, 1, 2, 3]
-)
-
-trestbps = st.number_input(
-    "Resting Blood Pressure",
-    80,
-    200,
-    120
+age = st.number_input(
+    "Enter Age",
+    20,
+    100,
+    45
 )
 
 chol = st.number_input(
-    "Cholesterol",
+    "Enter Cholesterol Level",
     100,
     600,
     200
 )
 
-fbs = st.selectbox(
-    "Fasting Blood Sugar",
-    [0, 1]
+trestbps = st.number_input(
+    "Enter Resting Blood Pressure",
+    80,
+    200,
+    120
 )
 
-thalach = st.number_input(
-    "Maximum Heart Rate",
-    60,
-    220,
-    150
-)
-
-exang = st.selectbox(
-    "Exercise Induced Angina",
-    [0, 1]
-)
-
-oldpeak = st.number_input(
-    "Oldpeak",
-    0.0,
-    6.0,
-    1.0
-)
-
-slope = st.selectbox(
-    "Slope",
-    [0, 1, 2]
-)
-
-# Prediction Button
+# Prediction
 if st.button("Predict"):
 
-    input_data = np.array([[
+    input_data = pd.DataFrame([[
         age,
-        sex,
-        cp,
-        trestbps,
         chol,
-        fbs,
-        0,
-        thalach,
-        exang,
-        oldpeak,
-        slope,
-        0,
-        0
-    ]])
+        trestbps
+    ]],
+    columns=[
+        'age',
+        'chol',
+        'trestbps'
+    ])
 
     prediction = model.predict(input_data)
 
     if prediction[0] == 1:
 
         st.error(
-            "⚠️ High Chance of Heart Disease"
+            "⚠️ Heart Disease Detected"
         )
 
     else:
 
         st.success(
-            "✅ Low Chance of Heart Disease"
+            "✅ No Heart Disease"
         )
